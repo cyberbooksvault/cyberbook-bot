@@ -1,14 +1,26 @@
+import os
+from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-TOKEN = "8411439065:AAEamhufk7sjBpqk6no81BM6JC-Len5QvdM"
+# Load environment variables from .env
+load_dotenv()
 
+# Read the secrets
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+GDRIVE_LINK = os.getenv("GDRIVE_LINK")
+
+# Start command handler
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Welcome to CyberBook Vault!\nSend your payment/transaction screenshot to get the link.")
+    await update.message.reply_text(
+        "✅ Payment confirmed!\nHere is your book 📚:\n" + GDRIVE_LINK
+    )
 
-app = ApplicationBuilder().token(TOKEN).build() 
+# Build the bot app
+app = ApplicationBuilder().token(BOT_TOKEN).build()
 app.add_handler(CommandHandler("start", start))
 
-print("Bot is running...")
-app.run_polling()
+# Start polling (long-running)
+if __name__ == "__main__":
+    app.run_polling()
 
